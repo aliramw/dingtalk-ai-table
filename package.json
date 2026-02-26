@@ -13,6 +13,10 @@
   "author": "Marila@Dingtalk",
   "license": "MIT",
   "homepage": "https://clawhub.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aliramw/dingtalk-ai-table.git"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
