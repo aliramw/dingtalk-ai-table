@@ -30,7 +30,7 @@ mcporter --version
 
 **获取 Streamable HTTP URL：**
 
-1. 访问钉钉 MCP Server 管理页面：https://mcp.dingtalk.com/#/detail?instanceId=24724&detailType=instanceMcpDetail
+1. 访问钉钉 MCP 广场：https://mcp.dingtalk.com/#/detail?mcpId=1060&detailType=marketMcpDetail
 2. 在页面**右侧**找到 `Streamable HTTP URL`
 3. 复制该 URL 并用于下方配置
 
