@@ -1,6 +1,6 @@
 {
   "name": "dingtalk-ai-table",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。",
   "keywords": [
     "dingtalk",
@@ -11,11 +11,17 @@
     "skill"
   ],
   "author": "Marila@Dingtalk",
+  "contributors": [
+    "Marila@Dingtalk"
+  ],
   "license": "MIT",
-  "homepage": "https://clawhub.com",
+  "homepage": "https://clawhub.com/skills/dingtalk-ai-table",
   "repository": {
     "type": "git",
     "url": "https://github.com/aliramw/dingtalk-ai-table.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aliramw/dingtalk-ai-table/issues"
   },
   "engines": {
     "node": ">=18.0.0"
