@@ -71,39 +71,7 @@ mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
 
 ### 创建第一个表格
 
-```bash
-# 使用上一步获取的 rootDentryUuid
-mcporter call dingtalk-ai-table create_base_app \
-  filename="我的第一个表格" \
-  target="dtcn_xxxxxxxx" \
-  --output json
-```
-
-创建成功后会返回表格的 `uuid`（即 `dentryUuid`），用于后续操作。
-
-## 常用命令速查
-
-| 操作 | 命令 |
-|------|------|
-| 获取根节点 | `mcporter call dingtalk-ai-table get_root_node_of_my_document --output json` |
-| 搜索表格 | `mcporter call dingtalk-ai-table search_accessible_ai_tables keyword="关键词" --output json` |
-| 列出数据表 | `mcporter call dingtalk-ai-table list_base_tables dentry-uuid="<UUID>" --output json` |
-| 查看字段 | `mcporter call dingtalk-ai-table list_base_field --args '{"dentryUuid":"<UUID>","sheetIdOrName":"数据表"}' --output json` |
-| 添加字段 | `mcporter call dingtalk-ai-table add_base_field --args '{"dentryUuid":"<UUID>","sheetIdOrName":"数据表","addField":{"name":"字段名","type":"text"}}' --output json` |
-| 添加记录 | `mcporter call dingtalk-ai-table add_base_record --args '{"dentryUuid":"<UUID>","sheetIdOrName":"数据表","records":[{"fields":{"字段 1":"值 1"}}]}' --output json` |
-| 查询记录 | `mcporter call dingtalk-ai-table search_base_record --args '{"dentryUuid":"<UUID>","sheetIdOrName":"数据表"}' --output json` |
-
-## 支持的字段类型
-
-| 类型 | 说明 | 示例 |
-|------|------|------|
-| `text` | 文本 | `{"name":"姓名","type":"text"}` |
-| `number` | 数字 | `{"name":"数量","type":"number"}` |
-| `singleSelect` | 单选 | `{"name":"状态","type":"singleSelect"}` |
-| `multipleSelect` | 多选 | `{"name":"标签","type":"multipleSelect"}` |
-| `date` | 日期 | `{"name":"日期","type":"date"}` |
-| `user` | 人员 | `{"name":"负责人","type":"user"}` |
-| `attachment` | 附件 | `{"name":"文件","type":"attachment"}` |
+跟你的 Claw 对话让他创建一个AI表格，看看能否创建成功。
 
 ## 故障排查
 
@@ -114,35 +82,12 @@ mcporter call dingtalk-ai-table create_base_app \
 3. 确认 URL 是完整的（以 `http` 或 `https` 开头）
 4. 检查网络连接，确保能访问钉钉服务
 
-### 找不到表格 / 权限错误
+### 某些表格操作失败
 
-1. 确认使用的是正确的 `dentryUuid`（创建表格后返回的 `uuid` 字段）
-2. 确认你有该表格的访问权限
-3. 使用 `search_accessible_ai_tables` 搜索你可访问的表格
+我们我们仍在不断增强钉钉AI表格的MCP能力，每天都会有更新，很可能今天无法实现的操作，明天就能让你 OpenClaw 实现了。
 
-### 字段类型不匹配
-
-- 单选/多选字段：添加记录时需使用 `{"name":"选项名","id":"选项 ID"}` 格式
-- 日期字段：支持 Unix 时间戳（毫秒）或 `YYYY-MM-DD` 格式
-- 人员字段：需使用钉钉用户 ID
-
-### 批量操作失败
-
-- 单次添加/删除记录最多 1000 条
-- 确保 JSON 格式正确（使用 `--args` 时）
-- 检查字段名是否与数据表中完全一致
-
-## 使用脚本
-
-对于批量操作，可使用项目自带的 Python 脚本：
-
-```bash
-# 批量添加字段
-python scripts/bulk_add_fields.py <dentryUuid> <sheetName> fields.json
-
-# 批量导入记录
-python scripts/import_records.py <dentryUuid> <sheetName> data.csv
-```
+也可以加入我们的讨论群，让我们第一时间了解最紧迫的功能需求。
+[加入钉钉讨论群](https://qr.dingtalk.com/action/joingroup?code=v1,k1,6T6sMqtYnX3JrR03p4y5EeTBHP4T+GLZbmGs3/dDTs29AN2XwsPGIg==&_dt_no_comment=1&origin=11?)
 
 ## 相关链接
 
@@ -151,6 +96,7 @@ python scripts/import_records.py <dentryUuid> <sheetName> data.csv
 - 📦 [ClawHub 技能页面](https://clawhub.com/skills/dingtalk-ai-table)
 - 🐛 [问题反馈 (GitHub Issues)](https://github.com/aliramw/dingtalk-ai-table/issues)
 - 📖 [源代码仓库](https://github.com/aliramw/dingtalk-ai-table)
+- 💬 [加入钉钉讨论群](https://qr.dingtalk.com/action/joingroup?code=v1,k1,6T6sMqtYnX3JrR03p4y5EeTBHP4T+GLZbmGs3/dDTs29AN2XwsPGIg==&_dt_no_comment=1&origin=11?)
 
 ## 技术支持
 
