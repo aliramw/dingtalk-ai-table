@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0] - 2026-02-27
+
+### 修复
+- 调整 registry metadata 格式，使用 `requiredEnv` 和 `credentials` 字段
+- SKILL.md description 中明确提及需要 DINGTALK_MCP_URL 凭证
+- 移除 frontmatter 中的非标准字段（仅保留 name 和 description）
+
 ## [0.2.9] - 2026-02-27
 
 ### 修复
