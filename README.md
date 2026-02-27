@@ -84,9 +84,9 @@ mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
 
 ### 某些表格操作失败
 
-我们我们仍在不断增强钉钉AI表格的MCP能力，每天都会有更新，很可能今天无法实现的操作，明天就能让你 OpenClaw 实现了。
+我们仍在不断增强钉钉 AI 表格的 MCP 能力，每天都会有更新，很可能今天无法实现的操作，明天就能让你的 OpenClaw 实现。
 
-也可以加入我们的讨论群，让我们第一时间了解最紧迫的功能需求。
+也可以加入我们的讨论群，让我们第一时间了解当前最紧迫的功能需求。
 [加入钉钉讨论群](https://qr.dingtalk.com/action/joingroup?code=v1,k1,6T6sMqtYnX3JrR03p4y5EeTBHP4T+GLZbmGs3/dDTs29AN2XwsPGIg==&_dt_no_comment=1&origin=11?)
 
 ## 相关链接
