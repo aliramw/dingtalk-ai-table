@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1] - 2026-02-27
+
+### 修复
+- 修复 credentials 存储方式说明不一致的问题
+- package.json 移除 `requiredEnv`，添加 `storageMethod` 说明
+- SKILL.md 补充两种凭证配置方式：`mcporter config`（推荐）和环境变量
+
 ## [0.3.0] - 2026-02-27
 
 ### 修复

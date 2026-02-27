@@ -48,9 +48,18 @@ mcporter --version
 2. 在页面**右侧**找到 `Streamable HTTP URL`
 3. 复制该 URL 并用于下方配置
 
+**方式一：使用 mcporter config（推荐）**
+
 ```bash
-# 添加钉钉 AI 表格服务器配置
+# 添加钉钉 AI 表格服务器配置（持久化存储）
 mcporter config add dingtalk-ai-table --url "<Streamable_HTTP_URL>"
+```
+
+**方式二：使用环境变量**
+
+```bash
+# 临时设置（当前终端会话有效）
+export DINGTALK_MCP_URL="<Streamable_HTTP_URL>"
 ```
 
 将 `<Streamable_HTTP_URL>` 替换为实际获取的完整 URL。
@@ -58,7 +67,7 @@ mcporter config add dingtalk-ai-table --url "<Streamable_HTTP_URL>"
 > **⚠️ 凭证安全**: Streamable HTTP URL 包含访问令牌，等同于密码：
 > - 不要提交到版本控制系统
 > - 不要分享给他人
-> - 建议在 `.mcporterrc` 中配置而非命令行参数
+> - 推荐使用 `mcporter config` 持久化存储，避免在命令历史中暴露
 
 ### 基本命令模式
 
