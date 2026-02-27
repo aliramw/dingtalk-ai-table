@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.8] - 2026-02-27
+
+### 修复
+- 修复 registry metadata 未正确声明 required credentials 的问题
+- SKILL.md frontmatter 添加 `requiresCredentials` 和 `requiresBinaries` 声明
+- package.json 改用 `peerDependencies` 声明 mcporter 依赖
+- 明确凭证名称 `DINGTALK_MCP_URL` 和获取方式
+
 ## [0.2.7] - 2026-02-27
 
 ### 安全
