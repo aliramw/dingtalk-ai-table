@@ -1,6 +1,16 @@
 ---
 name: dingtalk-ai-table
 description: 钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。需要配置 DINGTALK_MCP_URL 凭证。使用场景：创建 AI 表格、管理数据表结构、批量导入导出数据、自动化库存/项目管理等表格操作任务。
+version: 0.3.3
+metadata:
+  openclaw:
+    requires:
+      env:
+        - DINGTALK_MCP_URL
+      bins:
+        - mcporter
+    primaryEnv: DINGTALK_MCP_URL
+    homepage: https://github.com/aliramw/dingtalk-ai-table
 ---
 
 # 钉钉 AI 表格操作

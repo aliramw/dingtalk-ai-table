@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.3] - 2026-02-27
+
+### 安全与元数据
+- 在 SKILL.md frontmatter 中添加 `metadata.openclaw.requires` 声明
+- 明确声明需要的环境变量：`DINGTALK_MCP_URL`
+- 明确声明需要的二进制文件：`mcporter`
+- 添加 `primaryEnv: DINGTALK_MCP_URL` 指定主要凭证
+- 添加 `homepage` 字段指向 GitHub 仓库
+- 修复 ClawHub 审核指出的元数据不一致问题
+
+
 ## [0.3.2] - 2026-02-27
 
 ### 文档
