@@ -26,6 +26,26 @@ metadata:
 3. **脚本审查建议** - `scripts/` 目录包含 Python 辅助脚本，建议先审查再运行
 4. **测试环境优先** - 首次使用建议在测试表格中验证，确认无误后再操作生产数据
 
+### 🔒 安全加固措施（v0.3.4+）
+
+脚本已实施以下安全保护：
+
+| 保护措施 | 说明 |
+|----------|------|
+| **路径沙箱** | `resolve_safe_path()` 防止目录遍历攻击，限制文件访问在 `OPENCLAW_WORKSPACE` 内 |
+| **UUID 验证** | 严格验证 dentryUuid 格式，防止无效输入 |
+| **文件扩展名白名单** | 仅允许 `.json` / `.csv` 文件 |
+| **文件大小限制** | JSON 最大 10MB，CSV 最大 50MB，防止 DoS |
+| **字段类型白名单** | 仅允许预定义的字段类型 |
+| **命令超时** | mcporter 命令超时限制（60-120 秒） |
+| **输入清理** | 自动去除空白、验证空值 |
+
+**配置建议：**
+```bash
+# 设置工作目录限制（推荐）
+export OPENCLAW_WORKSPACE=/Users/marila/.openclaw/workspace
+```
+
 ## 前置要求
 
 ### 安装 mcporter CLI
@@ -188,14 +208,24 @@ mcporter call dingtalk-ai-table delete_base_record \
 # 批量添加字段
 python scripts/bulk_add_fields.py <dentryUuid> <sheetName> fields.json
 
-# 批量导入记录
+# 批量导入记录（支持 CSV 和 JSON）
 python scripts/import_records.py <dentryUuid> <sheetName> data.csv
+python scripts/import_records.py <dentryUuid> <sheetName> data.json [batch_size]
 ```
 
-> **⚠️ 脚本安全**: 
+> **🔒 脚本安全特性**:
+> - ✅ 路径沙箱：防止目录遍历攻击（`../etc/passwd` 等）
+> - ✅ UUID 格式验证：严格校验输入格式
+> - ✅ 文件扩展名白名单：仅允许 `.json` / `.csv`
+> - ✅ 文件大小限制：JSON 10MB / CSV 50MB
+> - ✅ 字段类型白名单：防止无效类型注入
+> - ✅ 命令超时保护：60-120 秒自动终止
+>
+> **测试验证**: 运行 `python3 tests/test_security.py` 执行 25 项安全测试
+>
+> **⚠️ 注意事项**: 
 > - 脚本仅调用 `mcporter` 命令和处理本地文件，无网络请求
 > - 首次运行前建议审查脚本源码
-> - 在测试环境验证后再用于生产数据
 > - 处理敏感数据时请在受控环境中执行
 
 ## 参考文档
