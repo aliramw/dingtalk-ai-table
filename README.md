@@ -33,7 +33,7 @@ mcporter --version
 
 1. 访问钉钉 MCP 广场 - AI 表格页面：
    https://mcp.dingtalk.com/#/detail?mcpId=1060&detailType=marketMcpDetail
-2. 在页面**右侧**点击“获取 MCP 凭证配置”按钮，然后找到 `Streamable HTTP URL`
+2. 在页面**右侧**点击“获取 MCP Server 配置”按钮，然后找到 `Streamable HTTP URL`
 3. 点击复制该 URL（完整地址，以 http 开头）
 
 ### 3. 配置 MCP 服务器
