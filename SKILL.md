@@ -1,7 +1,7 @@
 ---
 name: dingtalk-ai-table
 description: 钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。需要配置 DINGTALK_MCP_URL 凭证。使用场景：创建 AI 表格、管理数据表结构、批量导入导出数据、自动化库存/项目管理等表格操作任务。
-version: 0.3.5
+version: 0.3.8
 metadata:
   openclaw:
     requires:
@@ -237,6 +237,24 @@ python scripts/import_records.py <dentryUuid> <sheetName> data.json [batch_size]
 
 - **API 详情**: 见 [references/api-reference.md](references/api-reference.md)
 - **错误码说明**: 见 [references/error-codes.md](references/error-codes.md)
+
+## 根节点配置
+
+创建 AI 表格需要根节点 UUID 作为 `target` 参数。**根节点 UUID 已保存在 `~/workspace/TABLE.md`**，每次直接读取，无需重新查询。
+
+```bash
+# 读取根节点（已缓存，无需每次调用 API）
+ROOT_UUID=$(grep 'rootDentryUuid' ~/workspace/TABLE.md | grep -o '`[^`]*`' | tr -d '`')
+
+# 创建新表格
+mcporter call dingtalk-ai-table create_base_app filename="表格名" target="$ROOT_UUID" --output json
+```
+
+如果 `TABLE.md` 不存在或需要更新，重新获取：
+```bash
+mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
+# 将返回的 rootDentryUuid 写入 ~/workspace/TABLE.md
+```
 
 ## 注意事项
 
