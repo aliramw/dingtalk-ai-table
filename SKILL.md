@@ -1,7 +1,7 @@
 ---
 name: dingtalk-ai-table
 description: 钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。需要配置 DINGTALK_MCP_URL 凭证。使用场景：创建 AI 表格、管理数据表结构、批量导入导出数据、自动化库存/项目管理等表格操作任务。
-version: 0.3.9
+version: 0.4.0
 metadata:
   openclaw:
     requires:
@@ -33,7 +33,7 @@ metadata:
 | 保护措施 | 说明 |
 |----------|------|
 | **路径沙箱** | `resolve_safe_path()` 防止目录遍历攻击，限制文件访问在 `OPENCLAW_WORKSPACE` 内 |
-| **UUID 验证** | 严格验证 dentryUuid 格式，防止无效输入 |
+| **dentryUuid 验证** | 验证 API 返回的 dentryUuid 格式，兼容平台返回的合法 ID，防止空值和明显异常输入 |
 | **文件扩展名白名单** | 仅允许 `.json` / `.csv` 文件 |
 | **文件大小限制** | JSON 最大 10MB，CSV 最大 50MB，防止 DoS |
 | **字段类型白名单** | 仅允许预定义的字段类型 |
@@ -240,11 +240,14 @@ python scripts/import_records.py <dentryUuid> <sheetName> data.json [batch_size]
 
 ## 根节点配置
 
-创建 AI 表格需要根节点 UUID 作为 `target` 参数。**根节点 UUID 已保存在 `~/workspace/TABLE.md`**，每次直接读取，无需重新查询。
+创建 AI 表格需要根节点 `dentryUuid` 作为 `target` 参数。**根节点缓存文件必须放在工作区内**，推荐使用 `$OPENCLAW_WORKSPACE/TABLE.md`（例如 `~/.openclaw/workspace/TABLE.md`），不要使用 `~/workspace/TABLE.md` 这类工作区外路径。
 
 ```bash
+# 推荐：先确保工作区路径
+export OPENCLAW_WORKSPACE=${OPENCLAW_WORKSPACE:-$HOME/.openclaw/workspace}
+
 # 读取根节点（已缓存，无需每次调用 API）
-ROOT_UUID=$(grep 'rootDentryUuid' ~/workspace/TABLE.md | grep -o '`[^`]*`' | tr -d '`')
+ROOT_UUID=$(grep 'rootDentryUuid' "$OPENCLAW_WORKSPACE/TABLE.md" | grep -o '`[^`]*`' | tr -d '`')
 
 # 创建新表格
 mcporter call dingtalk-ai-table create_base_app filename="表格名" target="$ROOT_UUID" --output json
@@ -252,13 +255,14 @@ mcporter call dingtalk-ai-table create_base_app filename="表格名" target="$RO
 
 如果 `TABLE.md` 不存在或需要更新，重新获取：
 ```bash
+export OPENCLAW_WORKSPACE=${OPENCLAW_WORKSPACE:-$HOME/.openclaw/workspace}
 mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
-# 将返回的 rootDentryUuid 写入 ~/workspace/TABLE.md
+# 将返回的 rootDentryUuid 写入 $OPENCLAW_WORKSPACE/TABLE.md
 ```
 
 ## 注意事项
 
-1. **dentryUuid 识别**: 创建表格后返回多个 ID，使用 `uuid` 字段作为 `dentryUuid` 参数
+1. **dentryUuid 识别**: 创建表格后返回多个 ID，使用 API 返回的 `uuid` / `rootDentryUuid` 等实际 `dentryUuid` 字段值；不要自行编造，也不要假设它一定是 UUID v4
 2. **表名匹配**: 默认创建的表名为"数据表"，操作前需确认实际表名
 3. **字段值格式**: 单选/多选字段返回对象格式 `{"name":"选项","id":"xxx"}`
 4. **日期格式**: 日期字段使用 Unix 时间戳（毫秒）或 `YYYY-MM-DD` 格式

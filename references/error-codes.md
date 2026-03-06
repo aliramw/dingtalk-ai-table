@@ -5,7 +5,7 @@
 ### 5000001 - fail to get document info
 **原因**: 常见于 `dentryUuid` 参数不正确、文档不存在，或在 `mcporter call key:value` 方式下误用了 kebab-case 参数名（如 `dentry-uuid`）导致参数未被正确识别。  
 **解决**: 
-- 确认使用正确的 UUID（来自 create_base_app 返回的 `info.uuid`）
+- 确认使用 API 返回的正确 dentryUuid（如 create_base_app 返回的 `info.uuid` 或根节点 `rootDentryUuid`），不要自行构造，也不要假设它必须是 UUID v4
 - 检查文档权限
 - 在 `key:value` 调用方式下，使用 camelCase 参数名：`dentryUuid`、`sheetIdOrName`、`recordIds`
 - 对复杂参数优先使用 `--args` JSON，避免参数名被误写

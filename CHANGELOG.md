@@ -1,3 +1,14 @@
+## [0.4.0] - 2026-03-07
+
+### 修复
+
+**ClawHub 审核问题修复：**
+- ✅ 将根节点缓存文件路径从工作区外的 `~/workspace/TABLE.md` 改为工作区内的 `$OPENCLAW_WORKSPACE/TABLE.md`
+- ✅ 文档明确要求根节点缓存文件必须位于工作区内，避免 instruction scope 与脚本安全边界冲突
+- ✅ 脚本中的 `dentryUuid` 校验从“仅允许 UUID v4”放宽为“兼容平台返回的合法 dentryUuid”
+- ✅ README / SKILL / references 同步说明：`dentryUuid` 以 API 实际返回为准，不要求必须是 UUID v4
+- ✅ 安全测试用例同步更新，覆盖 `dtcn_...` 风格 ID
+
 ## [0.3.9] - 2026-03-07
 
 ### 文档修正
@@ -69,7 +80,7 @@
 
 **新增安全功能：**
 - ✅ **路径沙箱** - 新增 `resolve_safe_path()` 函数，防止目录遍历攻击（如 `../etc/passwd`）
-- ✅ **UUID 严格验证** - 所有 dentryUuid 参数必须通过 UUID v4 格式校验
+- ✅ **dentryUuid 合法性验证** - 所有 dentryUuid 参数都会校验为 API 返回的合法 ID 形态，避免空值和明显异常输入
 - ✅ **文件扩展名白名单** - 仅允许 `.json` 和 `.csv` 文件
 - ✅ **文件大小限制** - JSON 最大 10MB，CSV 最大 50MB，防止 DoS 攻击
 - ✅ **字段类型白名单** - 仅允许预定义的 11 种字段类型

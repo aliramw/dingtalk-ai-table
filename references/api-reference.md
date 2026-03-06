@@ -43,7 +43,7 @@
 ```json
 {
   "filename": "表格名称",
-  "target": "根节点 dentryUuid（来自 get_root_node_of_my_document）"
+  "target": "根节点 dentryUuid（来自 get_root_node_of_my_document；以 API 实际返回值为准，不要求必须是 UUID v4）"
 }
 ```
 

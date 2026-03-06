@@ -31,7 +31,7 @@ ALLOWED_FIELD_TYPES = {
     'text', 'number', 'singleSelect', 'multipleSelect',
     'date', 'user', 'attachment', 'checkbox', 'phone', 'email', 'url'
 }
-UUID_PATTERN = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
+DENTRY_UUID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{8,128}$')
 
 # ============== 安全函数 ==============
 
@@ -72,9 +72,9 @@ def resolve_safe_path(path: str, allowed_root: Optional[str] = None) -> Path:
             f"提示：设置 OPENCLAW_WORKSPACE 环境变量或确保文件在工作目录内"
         )
 
-def validate_uuid(uuid: str) -> bool:
-    """验证 UUID 格式"""
-    return bool(UUID_PATTERN.match(uuid.strip()))
+def validate_dentry_uuid(dentry_uuid: str) -> bool:
+    """验证 dentryUuid 格式（兼容平台返回的合法 ID，而非仅 UUID v4）"""
+    return bool(dentry_uuid and DENTRY_UUID_PATTERN.match(dentry_uuid.strip()))
 
 def validate_file_extension(filename: str, allowed_extensions: list) -> bool:
     """验证文件扩展名"""
@@ -260,10 +260,10 @@ def main():
     sheet_name = sys.argv[2]
     fields_file = sys.argv[3]
     
-    # 验证 UUID 格式
-    if not validate_uuid(dentry_uuid):
+    # 验证 dentryUuid 格式
+    if not validate_dentry_uuid(dentry_uuid):
         print("错误：无效的 dentryUuid 格式")
-        print("期望格式：xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (UUID v4)")
+        print("期望格式：请使用 API 返回的合法 dentryUuid（允许字母、数字、下划线、连字符）")
         sys.exit(1)
     
     # 验证 sheet_name 非空

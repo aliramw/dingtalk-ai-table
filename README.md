@@ -65,9 +65,11 @@ mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
 成功时会返回包含 `rootDentryUuid` 的 JSON，例如：
 ```json
 {
-  "rootDentryUuid": "dtcn_xxxxxxxx"
+  "rootDentryUuid": "dtcn_example_root_id_12345678"
 }
 ```
+
+> `rootDentryUuid` / `dentryUuid` 以 API 实际返回为准。它可能不是 UUID v4，不要自行套用 UUID v4 格式校验。
 
 ### 创建第一个表格
 

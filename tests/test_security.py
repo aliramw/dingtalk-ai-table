@@ -4,7 +4,7 @@
 
 测试脚本的安全加固功能：
 1. 路径安全限制 (resolve_safe_path)
-2. UUID 格式验证
+2. dentryUuid 格式验证
 3. 文件扩展名验证
 4. 文件大小限制
 5. JSON/CSV 安全加载
@@ -112,33 +112,37 @@ class TestResolveSafePath(unittest.TestCase):
             os.chdir(original_cwd)
 
 
-class TestUUIDValidation(unittest.TestCase):
-    """测试 UUID 格式验证功能"""
+class TestDentryUuidValidation(unittest.TestCase):
+    """测试 dentryUuid 格式验证功能"""
     
-    def test_valid_uuid(self):
-        """测试：有效的 UUID"""
-        valid_uuids = [
+    def test_valid_dentry_uuid(self):
+        """测试：有效的 dentryUuid"""
+        valid_ids = [
             "123e4567-e89b-12d3-a456-426614174000",
-            "123E4567-E89B-12D3-A456-426614174000",  # 大写
-            "123e4567-e89b-12d3-a456-426614174000\n",  # 带换行
+            "dtcn_example_root_id_12345678",
+            "abcDEF123_-xyz789",
+            "dtcn_example_root_id_12345678\n",
         ]
-        for uuid in valid_uuids:
-            with self.subTest(uuid=uuid):
-                self.assertTrue(bulk_add_fields.validate_uuid(uuid))
+        for dentry_uuid in valid_ids:
+            with self.subTest(dentry_uuid=dentry_uuid):
+                self.assertTrue(bulk_add_fields.validate_dentry_uuid(dentry_uuid))
+                self.assertTrue(import_records.validate_dentry_uuid(dentry_uuid))
     
-    def test_invalid_uuid(self):
-        """测试：无效的 UUID"""
-        invalid_uuids = [
+    def test_invalid_dentry_uuid(self):
+        """测试：无效的 dentryUuid"""
+        invalid_ids = [
             "",
-            "not-a-uuid",
-            "123e4567-e89b-12d3-a456",  # 太短
-            "123e4567e89b12d3a456426614174000",  # 无连字符
-            "123e4567-e89b-12d3-a456-426614174000-extra",  # 太长
-            "123e4567-e89b-12d3-a456-42661417400g",  # 无效字符
+            "short",
+            "含中文的ID",
+            "with space inside",
+            "bad/char",
+            "bad:semicolon;",
+            "a" * 129,
         ]
-        for uuid in invalid_uuids:
-            with self.subTest(uuid=uuid):
-                self.assertFalse(bulk_add_fields.validate_uuid(uuid))
+        for dentry_uuid in invalid_ids:
+            with self.subTest(dentry_uuid=dentry_uuid):
+                self.assertFalse(bulk_add_fields.validate_dentry_uuid(dentry_uuid))
+                self.assertFalse(import_records.validate_dentry_uuid(dentry_uuid))
 
 
 class TestFileExtensionValidation(unittest.TestCase):
@@ -321,8 +325,8 @@ class TestIntegration(unittest.TestCase):
         safe_path = bulk_add_fields.resolve_safe_path(str(fields_file))
         self.assertEqual(safe_path, fields_file.resolve())
         
-        # 验证 UUID
-        self.assertTrue(bulk_add_fields.validate_uuid("123e4567-e89b-12d3-a456-426614174000"))
+        # 验证 dentryUuid
+        self.assertTrue(bulk_add_fields.validate_dentry_uuid("dtcn_example_root_id_12345678"))
         
         # 验证文件扩展名
         self.assertTrue(bulk_add_fields.validate_file_extension(str(fields_file), ['.json']))
@@ -371,7 +375,7 @@ def run_tests():
     
     # 添加所有测试类
     suite.addTests(loader.loadTestsFromTestCase(TestResolveSafePath))
-    suite.addTests(loader.loadTestsFromTestCase(TestUUIDValidation))
+    suite.addTests(loader.loadTestsFromTestCase(TestDentryUuidValidation))
     suite.addTests(loader.loadTestsFromTestCase(TestFileExtensionValidation))
     suite.addTests(loader.loadTestsFromTestCase(TestSafeJsonLoad))
     suite.addTests(loader.loadTestsFromTestCase(TestFieldConfigValidation))
