@@ -1,3 +1,17 @@
+## [0.3.9] - 2026-03-07
+
+### 文档修正
+
+**参数命名说明修复：**
+- ✅ 修正 `SKILL.md` 中 `list_base_tables` 示例参数名：`dentry-uuid` → `dentryUuid`
+- ✅ 在 `README.md` 故障排查中补充说明：`mcporter call ... key:value` 方式必须使用 camelCase 参数名
+- ✅ 在 `references/error-codes.md` 中补充 `5000001` 的常见诱因：误用 kebab-case 参数名
+- ✅ 在 `references/error-codes.md` 的 FAQ 中增加明确排查顺序：先查参数命名，再查 ID / 权限
+
+**变更说明：**
+- 此版本仅文档修正，无功能变更
+- 修复 issue #1 中提到的调用误导问题
+
 ## [0.3.8] - 2026-03-05
 
 ### 文档更新

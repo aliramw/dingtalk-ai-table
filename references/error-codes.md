@@ -3,10 +3,12 @@
 ## 常见错误码
 
 ### 5000001 - fail to get document info
-**原因**: dentryUuid 参数不正确或文档不存在  
+**原因**: 常见于 `dentryUuid` 参数不正确、文档不存在，或在 `mcporter call key:value` 方式下误用了 kebab-case 参数名（如 `dentry-uuid`）导致参数未被正确识别。  
 **解决**: 
 - 确认使用正确的 UUID（来自 create_base_app 返回的 `info.uuid`）
 - 检查文档权限
+- 在 `key:value` 调用方式下，使用 camelCase 参数名：`dentryUuid`、`sheetIdOrName`、`recordIds`
+- 对复杂参数优先使用 `--args` JSON，避免参数名被误写
 
 ### 500 - 通用服务器错误
 **原因**: 参数格式错误或服务器内部问题  
@@ -53,10 +55,13 @@ mcporter auth dingtalk-ai-table --reset
 ## 常见问题
 
 ### Q: list_base_tables 返回 "fail to get document info"
-**A**: 尝试使用不同的 ID：
-- `uuid` 字段（推荐）
-- `dentryId` 字段
-- `docId` 字段
+**A**: 先检查参数命名，再检查 ID：
+- 如果你用的是 `mcporter call key:value`，参数名必须是 camelCase：`dentryUuid`，不要写成 `dentry-uuid`
+- 推荐直接用 `--args '{"dentryUuid":"xxx"}'`
+- 然后再确认是否使用了正确的 ID：
+  - `uuid` 字段（推荐）
+  - `dentryId` 字段
+  - `docId` 字段
 
 ### Q: add_base_field 返回 "may not be null"
 **A**: 使用 `--args` 传递 JSON：

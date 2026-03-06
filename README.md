@@ -84,6 +84,19 @@ mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
 
 ### 某些表格操作失败
 
+先检查参数命名。
+
+如果你使用的是 `mcporter call ... key:value` 这种调用方式，参数名必须使用 **camelCase**，例如：
+- `dentryUuid`
+- `sheetIdOrName`
+- `recordIds`
+
+不要写成 kebab-case，例如 `dentry-uuid`、`sheet-id-or-name`、`record-ids`。这类写法可能导致接口返回：
+- `errorCode: 5000001`
+- `errorMsg: fail to get document info`
+
+更稳妥的方式是统一使用 `--args` 传 JSON。
+
 我们仍在不断增强钉钉 AI 表格的 MCP 能力，每天都会有更新，很可能今天无法实现的操作，明天就能让你的 OpenClaw 实现。
 
 也可以加入我们的讨论群，让我们第一时间了解当前最紧迫的功能需求。
