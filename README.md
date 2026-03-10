@@ -2,6 +2,13 @@
 
 钉钉 AI 表格技能，已适配 **2026-03-10 发布的新版 MCP tools**。
 
+## 依赖与环境声明
+
+- 必需二进制：`mcporter`、`python3`
+- 必需环境变量：`DINGTALK_MCP_URL`
+- 推荐环境变量：`OPENCLAW_WORKSPACE`（脚本本地文件沙箱根目录）
+
+
 ## 本次升级重点
 
 - 全面切换到新 schema：`baseId / tableId / fieldId / recordId`

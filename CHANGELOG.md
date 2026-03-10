@@ -1,3 +1,13 @@
+## [0.5.1] - 2026-03-11
+
+### 元数据修复
+
+- ✅ 补回 `SKILL.md` frontmatter 中的 `version` 与 `metadata.openclaw.requires` 声明
+- ✅ 明确声明必需环境变量：`DINGTALK_MCP_URL`、`OPENCLAW_WORKSPACE`
+- ✅ 明确声明必需二进制：`mcporter`、`python3`
+- ✅ `package.json` 同步补充 `requiredEnv` / `requiresBinaries` / credentials 信息，修复 ClawHub 审核指出的 metadata mismatch
+- ✅ README 同步补充依赖与环境声明
+
 ## [0.5.0] - 2026-03-11
 
 ### 重大升级

@@ -1,6 +1,6 @@
 {
   "name": "dingtalk-ai-table",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "钉钉 AI 表格（多维表）操作技能。基于新版 MCP tools，使用 baseId / tableId / fieldId / recordId 体系执行 Base、Table、Field、Record 管理。脚本文件 I/O 限制在工作区内。",
   "keywords": [
     "dingtalk",
@@ -31,7 +31,12 @@
   },
   "clawhub": {
     "requiresBinaries": [
-      "mcporter"
+      "mcporter",
+      "python3"
+    ],
+    "requiredEnv": [
+      "DINGTALK_MCP_URL",
+      "OPENCLAW_WORKSPACE"
     ],
     "credentials": [
       {
@@ -39,6 +44,12 @@
         "description": "钉钉 MCP Server Streamable HTTP URL (含访问令牌)",
         "docs": "https://mcp.dingtalk.com/#/detail?mcpId=9555",
         "storageMethod": "mcporter config (recommended) or environment variable"
+      },
+      {
+        "name": "OPENCLAW_WORKSPACE",
+        "description": "本地脚本文件读写沙箱根目录；建议设置为 ~/.openclaw/workspace",
+        "docs": "https://github.com/aliramw/dingtalk-ai-table",
+        "storageMethod": "environment variable"
       }
     ]
   },
