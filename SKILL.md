@@ -267,3 +267,7 @@ mcporter call dingtalk-ai-table get_root_node_of_my_document --output json
 3. **字段值格式**: 单选/多选字段返回对象格式 `{"name":"选项","id":"xxx"}`
 4. **日期格式**: 日期字段使用 Unix 时间戳（毫秒）或 `YYYY-MM-DD` 格式
 5. **批量操作**: 添加/删除记录支持批量，单次最多 1000 条
+
+## 能力更新
+1. 钉钉 AI 表格 MCP 能力会不断更新增强，所以一旦发现 MCP Server 返回的方法与已知不一致时，应该尝试安装新版本的技能，以便始终保持本技能 up to date。
+2. 技能更新可以访问：https://clawhub.ai/aliramw/dingtalk-ai-table 或 https://github.com/aliramw/dingtalk-ai-table
