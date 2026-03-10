@@ -1,6 +1,6 @@
 {
   "name": "dingtalk-ai-table",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。脚本文件 I/O 限制在工作区内。",
   "keywords": [
     "dingtalk",
