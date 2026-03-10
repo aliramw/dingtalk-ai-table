@@ -1,3 +1,12 @@
+## [0.5.2] - 2026-03-11
+
+### 技能流程优化
+
+- ✅ 新增“版本守门规则”：若 `mcporter` 注册的 `dingtalk-ai-table` 仍返回旧版 schema，必须先提示用户去新版 MCP 页面获取新的 Server 地址，再替换本地注册配置
+- ✅ 修正新版 MCP 获取页面链接为 `https://mcp.dingtalk.com/#/detail?mcpId=9555&detailType=marketMcpDetail`
+- ✅ 将守门逻辑优化为“同一个 MCP Server 地址只强制检查一次”，避免每次运行重复做迁移检查
+- ✅ 移除带真实业务场景的示例内容，保留通用、可复用的技能规则
+
 ## [0.5.1] - 2026-03-11
 
 ### 元数据修复
