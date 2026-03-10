@@ -1,7 +1,7 @@
 {
   "name": "dingtalk-ai-table",
-  "version": "0.4.1",
-  "description": "钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉 MCP server 执行表格创建、数据表管理、字段操作、记录增删改查。脚本文件 I/O 限制在工作区内。",
+  "version": "0.5.0",
+  "description": "钉钉 AI 表格（多维表）操作技能。基于新版 MCP tools，使用 baseId / tableId / fieldId / recordId 体系执行 Base、Table、Field、Record 管理。脚本文件 I/O 限制在工作区内。",
   "keywords": [
     "dingtalk",
     "ai-table",
@@ -30,12 +30,14 @@
     "mcporter": ">=0.7.0"
   },
   "clawhub": {
-    "requiresBinaries": ["mcporter"],
+    "requiresBinaries": [
+      "mcporter"
+    ],
     "credentials": [
       {
         "name": "DINGTALK_MCP_URL",
         "description": "钉钉 MCP Server Streamable HTTP URL (含访问令牌)",
-        "docs": "https://mcp.dingtalk.com/#/detail?mcpId=1060",
+        "docs": "https://mcp.dingtalk.com/#/detail?mcpId=9555",
         "storageMethod": "mcporter config (recommended) or environment variable"
       }
     ]

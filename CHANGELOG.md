@@ -1,3 +1,43 @@
+## [0.5.0] - 2026-03-11
+
+### 重大升级
+
+**全面切换到钉钉 AI 表格新版 MCP schema：**
+- ✅ 从旧参数体系 `dentryUuid / sheetIdOrName / fieldIdOrName` 全面切换到新体系 `baseId / tableId / fieldId / recordId`
+- ✅ 以 2026-03-10 发布的新 MCP server 实际 methods 为准，重建技能文档与脚本
+- ✅ 覆盖新版全部 19 个 tools：Base / Table / Field / Record 全链路能力
+
+### 脚本重写
+
+**`scripts/bulk_add_fields.py`：**
+- ✅ 改为调用 `create_fields`
+- ✅ 输入参数改为 `<baseId> <tableId> fields.json`
+- ✅ 支持 `name -> fieldName` 自动兼容
+- ✅ 支持 `phone -> telephone` 自动兼容
+- ✅ 增加新字段类型与关联字段 config 校验
+
+**`scripts/import_records.py`：**
+- ✅ 改为调用 `create_records`
+- ✅ 输入参数改为 `<baseId> <tableId> data.(csv|json)`
+- ✅ 记录结构改为 `cells`
+- ✅ CSV 表头按 `fieldId` 解释
+- ✅ JSON 同时支持裸对象和 `{"cells": ...}` 两种格式
+- ✅ 支持布尔值 / 数字自动清洗
+
+### 文档重写
+
+- ✅ `SKILL.md` 按新版 schema 重写
+- ✅ `references/api-reference.md` 按真实 MCP schema 重写
+- ✅ `references/error-codes.md` 按新版排障逻辑重写
+- ✅ `README.md` 更新为新版说明
+- ✅ `package.json` 描述同步更新，版本提升到 `0.5.0`
+
+### 测试
+
+- ✅ `tests/test_security.py` 重写为新版 schema 测试
+- ✅ 自动化测试 **21 / 21 全通过**
+- ✅ Python 语法编译通过：`bulk_add_fields.py`、`import_records.py`、`test_security.py`
+
 ## [0.4.1] - 2026-03-10
 
 ### 文档更新
