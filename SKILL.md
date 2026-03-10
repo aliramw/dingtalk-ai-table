@@ -31,7 +31,7 @@ mcporter --version
 
 ### 配置 MCP Server
 
-在钉钉 MCP 广场获取新版钉钉 AI 表格 MCP 的 `Streamable HTTP URL`。
+在钉钉 MCP 广场 https://mcp.dingtalk.com/#/detail?mcpId=1060&detailType=marketMcpDetail 获取新版钉钉 AI 表格 MCP 的 `Streamable HTTP URL`。
 
 方式一：直接配置到 mcporter
 
