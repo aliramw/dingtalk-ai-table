@@ -2,7 +2,7 @@
 
 钉钉 AI 表格技能，已适配 **2026-03-10 发布的新版 MCP tools**。
 
-Clawhub 技能地址：https://clawhub.ai/aliramw/dingtalk-ai-table
+ClawHub 技能地址：https://clawhub.ai/aliramw/dingtalk-ai-table
 
 ## 依赖与环境声明
 
