@@ -1,4 +1,4 @@
-# dingtalk-ai-table （官方维护）
+# dingtalk-ai-table（官方维护）
 
 钉钉 AI 表格技能，已适配 **2026-03-10 发布的新版 MCP tools**。
 
