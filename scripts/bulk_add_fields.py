@@ -145,7 +145,7 @@ def run_mcporter(args: List[str]) -> Optional[Dict[str, Any]]:
         print('错误：空命令')
         return None
 
-    cmd = ['mcporter', 'call', 'dingtalk-ai-table'] + args
+    cmd = ['mcporter', 'call', 'dingtalk-ai-table', '--output', 'text'] + args
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
         if result.returncode != 0:
@@ -202,7 +202,7 @@ def bulk_add_fields(base_id: str, table_id: str, fields_file: str) -> bool:
             return False
 
     payload = build_create_fields_payload(base_id, table_id, fields)
-    result = run_mcporter(['create_fields', '--args', json.dumps(payload, ensure_ascii=False), '--output', 'json'])
+    result = run_mcporter(['create_fields', '--args', json.dumps(payload, ensure_ascii=False)])
 
     if not result:
         return False
