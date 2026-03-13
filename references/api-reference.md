@@ -41,8 +41,8 @@
 ### 2.1 查找 Base
 
 ```bash
-mcporter call '<mcp-url>' .list_bases limit=10 --output json
-mcporter call '<mcp-url>' .search_bases query='销售' --output json
+mcporter call '<mcp-url>' .list_bases limit=10 --output text
+mcporter call '<mcp-url>' .search_bases query='销售' --output text
 ```
 
 先拿到 `baseId`，后续所有操作都从它出发。
@@ -50,7 +50,7 @@ mcporter call '<mcp-url>' .search_bases query='销售' --output json
 ### 2.2 进入 Base 看目录
 
 ```bash
-mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output json
+mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output text
 ```
 
 从返回结果里先拿 `tableId`；如果只是想知道有哪些表，这一步就够了。
@@ -60,7 +60,7 @@ mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output json
 ```bash
 mcporter call '<mcp-url>' .get_tables \
   --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output json
+  --output text
 ```
 
 这一步会返回：
@@ -74,7 +74,7 @@ mcporter call '<mcp-url>' .get_tables \
 ```bash
 mcporter call '<mcp-url>' .get_fields \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output json
+  --output text
 ```
 
 当字段是单选、多选、日期、进度、关联字段时，**要用这一步读完整 config**，不要只看 `get_tables` 摘要。
@@ -84,7 +84,7 @@ mcporter call '<mcp-url>' .get_fields \
 ```bash
 mcporter call '<mcp-url>' .query_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":100}' \
-  --output json
+  --output text
 ```
 
 按 recordId 精准取：
@@ -92,7 +92,7 @@ mcporter call '<mcp-url>' .query_records \
 ```bash
 mcporter call '<mcp-url>' .query_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","recordIds":["rec_xxx"]}' \
-  --output json
+  --output text
 ```
 
 ---
@@ -137,7 +137,7 @@ mcporter call '<mcp-url>' .query_records \
 示例：
 
 ```bash
-mcporter call '<mcp-url>' .create_base baseName='销售日报' --output json
+mcporter call '<mcp-url>' .create_base baseName='销售日报' --output text
 ```
 
 ## 3.5 update_base

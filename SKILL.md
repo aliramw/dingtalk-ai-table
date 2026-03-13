@@ -191,14 +191,14 @@ export OPENCLAW_WORKSPACE="$HOME/.openclaw/workspace"
 ### 1. 先找 Base
 
 ```bash
-mcporter call dingtalk-ai-table list_bases limit=10 --output json
-mcporter call dingtalk-ai-table search_bases query="销售" --output json
+mcporter call dingtalk-ai-table list_bases limit=10 --output text
+mcporter call dingtalk-ai-table search_bases query="销售" --output text
 ```
 
 ### 2. 再拿 Table 目录
 
 ```bash
-mcporter call dingtalk-ai-table get_base baseId="base_xxx" --output json
+mcporter call dingtalk-ai-table get_base baseId="base_xxx" --output text
 ```
 
 ### 3. 再展开表结构
@@ -206,7 +206,7 @@ mcporter call dingtalk-ai-table get_base baseId="base_xxx" --output json
 ```bash
 mcporter call dingtalk-ai-table get_tables \
   --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output json
+  --output text
 ```
 
 ### 4. 字段复杂时读完整配置
@@ -214,7 +214,7 @@ mcporter call dingtalk-ai-table get_tables \
 ```bash
 mcporter call dingtalk-ai-table get_fields \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output json
+  --output text
 ```
 
 ### 5. 再查 / 写记录
@@ -222,11 +222,11 @@ mcporter call dingtalk-ai-table get_fields \
 ```bash
 mcporter call dingtalk-ai-table query_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":20}' \
-  --output json
+  --output text
 
 mcporter call dingtalk-ai-table create_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}' \
-  --output json
+  --output text
 ```
 
 ## 脚本
