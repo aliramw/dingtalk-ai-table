@@ -161,8 +161,8 @@ mcporter call server.update_table table-id='tbl_xxx'
 ### 看 Base
 
 ```bash
-mcporter call '<mcp-url>' .list_bases limit=10 --output json
-mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output json
+mcporter call '<mcp-url>' .list_bases limit=10 --output text
+mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output text
 ```
 
 ### 看 Table / Field
@@ -170,11 +170,11 @@ mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output json
 ```bash
 mcporter call '<mcp-url>' .get_tables \
   --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output json
+  --output text
 
 mcporter call '<mcp-url>' .get_fields \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output json
+  --output text
 ```
 
 ### 查记录
@@ -182,7 +182,7 @@ mcporter call '<mcp-url>' .get_fields \
 ```bash
 mcporter call '<mcp-url>' .query_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":10}' \
-  --output json
+  --output text
 ```
 
 ### 新增记录
@@ -190,7 +190,7 @@ mcporter call '<mcp-url>' .query_records \
 ```bash
 mcporter call '<mcp-url>' .create_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}' \
-  --output json
+  --output text
 ```
 
 ---

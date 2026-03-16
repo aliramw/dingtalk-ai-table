@@ -137,7 +137,7 @@ def run_mcporter(args: List[str]) -> Optional[Dict[str, Any]]:
     if not args:
         print('错误：空命令')
         return None
-    cmd = ['mcporter', 'call', 'dingtalk-ai-table'] + args
+    cmd = ['mcporter', 'call', 'dingtalk-ai-table', '--output', 'text'] + args
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if result.returncode != 0:
@@ -238,7 +238,7 @@ def import_records(base_id: str, table_id: str, records: List[Dict[str, Any]], b
         batch = records[i:i + batch_size]
         batch_num = (i // batch_size) + 1
         payload = build_create_records_payload(base_id, table_id, batch)
-        result = run_mcporter(['create_records', '--args', json.dumps(payload, ensure_ascii=False), '--output', 'json'])
+        result = run_mcporter(['create_records', '--args', json.dumps(payload, ensure_ascii=False)])
         if result:
             print(f"[{batch_num}/{total_batches}] ✓ 已提交 {len(batch)} 条记录")
         else:
