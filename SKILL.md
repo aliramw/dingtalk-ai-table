@@ -1,7 +1,7 @@
 ---
 name: dingtalk-ai-table
 description: 钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉官方新版 AI 表格 MCP server，基于 baseId / tableId / fieldId / recordId 体系执行 Base、Table、Field、Record 的查询与增删改。适用于创建 AI 表格、搜索表格、读取表结构、批量增删改记录、批量建字段、更新字段配置、按模板建表等场景。需要配置 DINGTALK_MCP_URL 或直接使用 Streamable HTTP URL。
-version: 0.5.2
+version: 0.5.3
 metadata:
   openclaw:
     requires:
@@ -99,6 +99,7 @@ mcporter list dingtalk-ai-table --schema
 - `create_records`
 - `update_records`
 - `delete_records`
+- `prepare_attachment_upload`
 
 才允许继续真正的 AI 表格操作。
 
@@ -186,6 +187,9 @@ export OPENCLAW_WORKSPACE="$HOME/.openclaw/workspace"
 - `update_records`
 - `delete_records`
 
+### 附件层
+- `prepare_attachment_upload`
+
 ## 推荐工作流
 
 ### 1. 先找 Base
@@ -228,6 +232,61 @@ mcporter call dingtalk-ai-table create_records \
   --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}' \
   --output json
 ```
+
+### 6. 写入附件字段
+
+attachment 字段支持三种写法：
+
+**方式一：先上传，再写 fileToken（推荐，可靠）**
+
+```bash
+# Step 1：申请上传地址（返回 uploadUrl 和 fileToken）
+mcporter call dingtalk-ai-table prepare_attachment_upload \
+  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}' \
+  --output text
+
+# Step 2：把文件 PUT 到 uploadUrl（必须带 Content-Type，值必须与 mimeType 完全一致）
+curl -X PUT "<uploadUrl>" \
+  -H "Content-Type: application/pdf" \
+  --data-binary @report.pdf
+
+# Step 3：把 fileToken 写入记录
+mcporter call dingtalk-ai-table create_records \
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}' \
+  --output text
+```
+
+**方式二：直接传外链 URL（异步转存，best-effort）**
+
+```bash
+mcporter call dingtalk-ai-table create_records \
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"url":"https://example.com/file.pdf"}]}}]}' \
+  --output text
+```
+
+> URL 转存是 best-effort 异步链路，返回成功仅表示已受理，不保证立即可读。可靠写入请用 fileToken 方式。
+
+**方式三：原样回传已有附件数据（保留 / 追加已有附件时使用）**
+
+从 `query_records` 读出的 attachment 单元格数据是完整对象数组，字段形状如下：
+
+```json
+[
+  {
+    "filename": "a.xlsx",
+    "size": 92250,
+    "type": "xls",
+    "resourceId": "<id>",
+    "resourceUrl": "<resourceUrl>"
+  }
+]
+```
+
+其中 `type` 是文件类别枚举，常见值为 `"xls"`、`"image"` 等；`resourceUrl` 通常为有时效的下载链接。
+
+如需保留已有附件，把读出的值原样塞回即可。如需追加新附件，把新的 `{"fileToken":"ft_xxx"}` 与已有对象合并成一个数组一起传入。
+
+`update_records` 的 attachment 字段格式相同，传入后会整体覆盖该字段。
 
 ## 脚本
 

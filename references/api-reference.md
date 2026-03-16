@@ -5,7 +5,7 @@
 
 ## 1. 能力总览
 
-当前 MCP tools 共 19 个：
+当前 MCP tools 共 20 个：
 
 ### Base 管理
 - `list_bases`：列出我可访问的 Base
@@ -33,6 +33,9 @@
 - `create_records`：批量新增记录
 - `update_records`：批量更新记录
 - `delete_records`：批量删除记录
+
+### 附件管理
+- `prepare_attachment_upload`：为 attachment 字段申请 OSS 直传地址
 
 ---
 
@@ -345,6 +348,10 @@ mcporter call '<mcp-url>' .create_base baseName='销售日报' --output json
 - `url` 必须传对象：`{"text":"官网","link":"https://..."}`
 - `richText` 必须传对象：`{"markdown":"**加粗**"}`
 - `group` 字段 key 是 `cid`，不是 `openConversationId`
+- `attachment` 支持三种写法：
+  - `[{"fileToken":"ft_xxx"}]`：通过 `prepare_attachment_upload` 上传后填入（推荐）
+  - `[{"url":"https://..."}]`：外链 URL，服务端异步转存，best-effort
+  - `[{"filename":"a.xlsx","size":92250,"type":"xls"|"image","resourceId":"<id>","resourceUrl":"<resourceUrl>"}]`：从 `query_records` 读出的原始对象原样回传，用于保留已有附件；`type` 为文件类别枚举（`"xls"`、`"image"` 等）；追加新附件时与 `fileToken` 对象合并为数组
 
 ## 3.18 update_records
 
@@ -369,6 +376,7 @@ mcporter call '<mcp-url>' .create_base baseName='销售日报' --output json
 注意：
 - 只传要更新的字段即可
 - 未传字段保持原值
+- `attachment` 字段传入后**整体覆盖**（三种写法均支持：`fileToken`、`url`、完整对象数组）；需保留已有附件时，先从 `query_records` 读出原始对象再原样合并回传
 
 ## 3.19 delete_records
 
@@ -378,6 +386,44 @@ mcporter call '<mcp-url>' .create_base baseName='销售日报' --output json
 - `baseId`
 - `tableId`
 - `recordIds`：最多 100 个
+
+## 3.20 prepare_attachment_upload
+
+为 attachment 字段申请带容量校验的 OSS 直传地址。**仅用于 attachment 字段写入链路，不是通用文件上传入口。**
+
+参数：
+- `baseId`：必填
+- `fileName`：必填，必须包含扩展名（如 `report.xlsx`、`photo.png`）
+- `size`：必填，文件字节数，必须大于 0
+- `mimeType`：可选，如 `application/pdf`、`image/png`；不传时服务端按扩展名推断
+
+返回字段（关键）：
+- `uploadUrl`：PUT 上传地址
+- `fileToken`：写入 attachment 字段用的 token
+
+完整上传流程：
+
+```bash
+# 1. 申请上传地址
+mcporter call dingtalk-ai-table prepare_attachment_upload \
+  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}' \
+  --output text
+
+# 2. PUT 文件到 uploadUrl（Content-Type 必须与 mimeType 完全一致）
+curl -X PUT "<uploadUrl>" \
+  -H "Content-Type: application/pdf" \
+  --data-binary @report.pdf
+
+# 3. 写入记录
+mcporter call dingtalk-ai-table create_records \
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}' \
+  --output text
+```
+
+注意：
+- PUT 请求必须携带 `Content-Type` header，值必须与 `mimeType` 完全一致
+- `prepare_attachment_upload` 不接收文件二进制，实际上传在 MCP 外由客户端完成
+- 此工具不适用于导入类任务的文件上传
 
 ---
 
