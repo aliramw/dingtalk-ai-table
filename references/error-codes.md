@@ -48,6 +48,19 @@ mcporter call server.update_table table-id='tbl_xxx'
 
 ---
 
+### 输出模式理解错误
+
+**现象**
+- 用较老版本 `mcporter` 调用时，输出格式和预期不一致
+- 误以为 AI 表格 MCP 的返回不是标准 JSON
+
+**解决**
+- `mcporter 0.8.1+` 可直接调用
+- 更低版本需要显式加 `--output text`
+- AI 表格 MCP 无论使用哪种模式，返回体本身都是标准 JSON；差异主要在 `mcporter` 的输出处理方式
+
+---
+
 ### 查询记录时单选 / 多选过滤无结果
 
 **现象**
@@ -161,36 +174,32 @@ mcporter call server.update_table table-id='tbl_xxx'
 ### 看 Base
 
 ```bash
-mcporter call '<mcp-url>' .list_bases limit=10 --output text
-mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output text
+mcporter call '<mcp-url>' .list_bases limit=10
+mcporter call '<mcp-url>' .get_base baseId='base_xxx'
 ```
 
 ### 看 Table / Field
 
 ```bash
 mcporter call '<mcp-url>' .get_tables \
-  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}'
 
 mcporter call '<mcp-url>' .get_fields \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}'
 ```
 
 ### 查记录
 
 ```bash
 mcporter call '<mcp-url>' .query_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":10}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":10}'
 ```
 
 ### 新增记录
 
 ```bash
 mcporter call '<mcp-url>' .create_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}'
 ```
 
 ---

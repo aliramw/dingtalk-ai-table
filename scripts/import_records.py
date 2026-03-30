@@ -19,6 +19,7 @@ import json
 import subprocess
 import os
 import re
+from functools import lru_cache
 from pathlib import Path
 from typing import Union, List, Dict, Any, Optional, Tuple
 
@@ -31,6 +32,8 @@ ALLOWED_JSON_EXTENSIONS = ['.json']
 RESOURCE_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{8,128}$')
 MAX_RECORDS_PER_BATCH = 100
 DEFAULT_BATCH_SIZE = 50
+MCPORTER_VERSION_PATTERN = re.compile(r'(\d+)\.(\d+)\.(\d+)')
+MCPORTER_TEXT_OUTPUT_CUTOFF = (0, 8, 1)
 
 
 def resolve_safe_path(path: str, allowed_root: Optional[str] = None) -> Path:
@@ -60,6 +63,39 @@ def validate_dentry_uuid(dentry_uuid: str) -> bool:
 
 def validate_file_extension(filename: str, allowed_extensions: list) -> bool:
     return any(filename.lower().endswith(ext) for ext in allowed_extensions)
+
+
+def parse_mcporter_version(raw_text: str) -> Optional[Tuple[int, int, int]]:
+    match = MCPORTER_VERSION_PATTERN.search(raw_text)
+    if not match:
+        return None
+    return tuple(int(part) for part in match.groups())
+
+
+@lru_cache(maxsize=1)
+def get_mcporter_version() -> Optional[Tuple[int, int, int]]:
+    for cmd in (['mcporter', '--version'], ['mcporter', 'version']):
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            return None
+
+        if result.returncode != 0:
+            continue
+
+        version = parse_mcporter_version(f"{result.stdout}\n{result.stderr}")
+        if version is not None:
+            return version
+
+    return None
+
+
+def build_mcporter_call(args: List[str]) -> List[str]:
+    cmd = ['mcporter', 'call', 'dingtalk-ai-table']
+    version = get_mcporter_version()
+    if version is not None and version < MCPORTER_TEXT_OUTPUT_CUTOFF:
+        cmd.extend(['--output', 'text'])
+    return cmd + args
 
 
 def safe_csv_load(file_path: Path, max_size: int = MAX_FILE_SIZE) -> List[RecordDict]:
@@ -137,7 +173,7 @@ def run_mcporter(args: List[str]) -> Optional[Dict[str, Any]]:
     if not args:
         print('错误：空命令')
         return None
-    cmd = ['mcporter', 'call', 'dingtalk-ai-table', '--output', 'text'] + args
+    cmd = build_mcporter_call(args)
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if result.returncode != 0:

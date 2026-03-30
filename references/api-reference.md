@@ -3,6 +3,13 @@
 > 以 MCP server 实际 schema 为准，不再使用旧版 `dentryUuid / sheetIdOrName / fieldIdOrName` 体系。
 > 新版核心 ID 体系：`baseId` / `tableId` / `fieldId` / `recordId`。
 
+推荐使用 `mcporter 0.8.1` 及以上版本。
+
+输出模式兼容说明：
+- `mcporter 0.8.1+` 可直接调用
+- 更低版本需要显式加 `--output text`
+- AI 表格 MCP 无论使用哪种模式，返回体本身都是标准 JSON；差异主要在 `mcporter` 的输出处理方式
+
 ## 1. 能力总览
 
 当前 MCP tools 共 20 个：
@@ -44,8 +51,8 @@
 ### 2.1 查找 Base
 
 ```bash
-mcporter call '<mcp-url>' .list_bases limit=10 --output text
-mcporter call '<mcp-url>' .search_bases query='销售' --output text
+mcporter call '<mcp-url>' .list_bases limit=10
+mcporter call '<mcp-url>' .search_bases query='销售'
 ```
 
 先拿到 `baseId`，后续所有操作都从它出发。
@@ -53,7 +60,7 @@ mcporter call '<mcp-url>' .search_bases query='销售' --output text
 ### 2.2 进入 Base 看目录
 
 ```bash
-mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output text
+mcporter call '<mcp-url>' .get_base baseId='base_xxx'
 ```
 
 从返回结果里先拿 `tableId`；如果只是想知道有哪些表，这一步就够了。
@@ -62,8 +69,7 @@ mcporter call '<mcp-url>' .get_base baseId='base_xxx' --output text
 
 ```bash
 mcporter call '<mcp-url>' .get_tables \
-  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}'
 ```
 
 这一步会返回：
@@ -76,8 +82,7 @@ mcporter call '<mcp-url>' .get_tables \
 
 ```bash
 mcporter call '<mcp-url>' .get_fields \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}'
 ```
 
 当字段是单选、多选、日期、进度、关联字段时，**要用这一步读完整 config**，不要只看 `get_tables` 摘要。
@@ -86,16 +91,14 @@ mcporter call '<mcp-url>' .get_fields \
 
 ```bash
 mcporter call '<mcp-url>' .query_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":100}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":100}'
 ```
 
 按 recordId 精准取：
 
 ```bash
 mcporter call '<mcp-url>' .query_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","recordIds":["rec_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","recordIds":["rec_xxx"]}'
 ```
 
 ---
@@ -140,7 +143,7 @@ mcporter call '<mcp-url>' .query_records \
 示例：
 
 ```bash
-mcporter call '<mcp-url>' .create_base baseName='销售日报' --output text
+mcporter call '<mcp-url>' .create_base baseName='销售日报'
 ```
 
 ## 3.5 update_base
@@ -406,8 +409,7 @@ mcporter call '<mcp-url>' .create_base baseName='销售日报' --output text
 ```bash
 # 1. 申请上传地址
 mcporter call dingtalk-ai-table prepare_attachment_upload \
-  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}' \
-  --output text
+  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}'
 
 # 2. PUT 文件到 uploadUrl（Content-Type 必须与 mimeType 完全一致）
 curl -X PUT "<uploadUrl>" \
@@ -416,8 +418,7 @@ curl -X PUT "<uploadUrl>" \
 
 # 3. 写入记录
 mcporter call dingtalk-ai-table create_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}'
 ```
 
 注意：
