@@ -25,6 +25,13 @@ metadata:
 
 不要再用旧版 `dentryUuid / sheetIdOrName / fieldIdOrName`。
 
+推荐使用 `mcporter 0.8.1` 及以上版本。
+
+输出模式兼容说明：
+- `mcporter 0.8.1+` 可直接调用
+- 更低版本需要显式加 `--output text`
+- AI 表格 MCP 无论使用哪种模式，返回体本身都是标准 JSON；差异主要在 `mcporter` 的输出处理方式
+
 ## 版本守门规则（每个 MCP Server 地址只强制检查一次）
 
 在真正开始任何 AI 表格操作前，必须先检查当前 `mcporter` 注册的 `dingtalk-ai-table` MCP server 实际返回的 tools schema。**但这个检查不该每次都重复做；同一个 MCP Server 地址只需要强制检查一次。**
@@ -195,42 +202,38 @@ export OPENCLAW_WORKSPACE="$HOME/.openclaw/workspace"
 ### 1. 先找 Base
 
 ```bash
-mcporter call dingtalk-ai-table list_bases limit=10 --output text
-mcporter call dingtalk-ai-table search_bases query="销售" --output text
+mcporter call dingtalk-ai-table list_bases limit=10
+mcporter call dingtalk-ai-table search_bases query="销售"
 ```
 
 ### 2. 再拿 Table 目录
 
 ```bash
-mcporter call dingtalk-ai-table get_base baseId="base_xxx" --output text
+mcporter call dingtalk-ai-table get_base baseId="base_xxx"
 ```
 
 ### 3. 再展开表结构
 
 ```bash
 mcporter call dingtalk-ai-table get_tables \
-  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableIds":["tbl_xxx"]}'
 ```
 
 ### 4. 字段复杂时读完整配置
 
 ```bash
 mcporter call dingtalk-ai-table get_fields \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","fieldIds":["fld_xxx"]}'
 ```
 
 ### 5. 再查 / 写记录
 
 ```bash
 mcporter call dingtalk-ai-table query_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":20}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":20}'
 
 mcporter call dingtalk-ai-table create_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}'
 ```
 
 ### 6. 写入附件字段
@@ -242,8 +245,7 @@ attachment 字段支持三种写法：
 ```bash
 # Step 1：申请上传地址（返回 uploadUrl 和 fileToken）
 mcporter call dingtalk-ai-table prepare_attachment_upload \
-  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}' \
-  --output text
+  --args '{"baseId":"base_xxx","fileName":"report.pdf","size":102400,"mimeType":"application/pdf"}'
 
 # Step 2：把文件 PUT 到 uploadUrl（必须带 Content-Type，值必须与 mimeType 完全一致）
 curl -X PUT "<uploadUrl>" \
@@ -252,16 +254,14 @@ curl -X PUT "<uploadUrl>" \
 
 # Step 3：把 fileToken 写入记录
 mcporter call dingtalk-ai-table create_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"fileToken":"ft_xxx"}]}}]}'
 ```
 
 **方式二：直接传外链 URL（异步转存，best-effort）**
 
 ```bash
 mcporter call dingtalk-ai-table create_records \
-  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"url":"https://example.com/file.pdf"}]}}]}' \
-  --output text
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_attach":[{"url":"https://example.com/file.pdf"}]}}]}'
 ```
 
 > URL 转存是 best-effort 异步链路，返回成功仅表示已受理，不保证立即可读。可靠写入请用 fileToken 方式。
