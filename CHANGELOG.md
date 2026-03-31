@@ -1,3 +1,12 @@
+## [0.6.0] - 2026-03-31
+
+### 文档与测试增强
+
+- ✅ 新增更完整的 skill metadata，包括 author / category / tags / documentation / support
+- ✅ 在 `SKILL.md` 增加“5 分钟快速开始”和核心概念说明，降低上手门槛
+- ✅ `package.json` 的测试命令扩展为同时执行 `test_security.py` 与 `test_triggering.py`
+- ✅ 新增补充文档与示例文件，完善技能交付内容
+
 ## [0.5.4] - 2026-03-31
 
 ### 维护发布

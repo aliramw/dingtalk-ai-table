@@ -1,6 +1,6 @@
 {
   "name": "dingtalk-ai-table",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "钉钉 AI 表格（多维表）操作技能。基于新版 MCP tools，使用 baseId / tableId / fieldId / recordId 体系执行 Base、Table、Field、Record 管理。脚本文件 I/O 限制在工作区内。",
   "keywords": [
     "dingtalk",
@@ -54,6 +54,6 @@
     ]
   },
   "scripts": {
-    "test": "python3 tests/test_security.py"
+    "test": "python3 tests/test_security.py && python3 tests/test_triggering.py"
   }
 }

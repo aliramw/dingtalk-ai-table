@@ -1,8 +1,18 @@
 ---
 name: dingtalk-ai-table
 description: 钉钉 AI 表格（多维表）操作技能。使用 mcporter CLI 连接钉钉官方新版 AI 表格 MCP server，基于 baseId / tableId / fieldId / recordId 体系执行 Base、Table、Field、Record 的查询与增删改。适用于创建 AI 表格、搜索表格、读取表结构、批量增删改记录、批量建字段、更新字段配置、按模板建表等场景。需要配置 DINGTALK_MCP_URL 或直接使用 Streamable HTTP URL。
-version: 0.5.4
+version: 0.6.0
 metadata:
+  author: Marila@Dingtalk
+  category: productivity
+  tags:
+    - dingtalk
+    - spreadsheet
+    - mcp
+    - automation
+    - data-management
+  documentation: https://github.com/aliramw/dingtalk-ai-table
+  support: https://github.com/aliramw/dingtalk-ai-table/issues
   openclaw:
     requires:
       env:
@@ -16,6 +26,39 @@ metadata:
 ---
 
 # 钉钉 AI 表格操作（新版 MCP）
+
+## 🚀 5 分钟快速开始
+
+### 1️⃣ 列出我的表格
+```bash
+mcporter call '<DINGTALK_MCP_URL>' .list_bases limit=5
+```
+
+### 2️⃣ 创建新表格
+```bash
+mcporter call '<DINGTALK_MCP_URL>' .create_base baseName='我的项目'
+```
+
+### 3️⃣ 添加记录
+```bash
+mcporter call '<DINGTALK_MCP_URL>' .create_records \
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","records":[{"cells":{"fld_name":"张三"}}]}'
+```
+
+### 4️⃣ 查询记录
+```bash
+mcporter call '<DINGTALK_MCP_URL>' .query_records \
+  --args '{"baseId":"base_xxx","tableId":"tbl_xxx","limit":10}'
+```
+
+### 5️⃣ 批量导入
+```bash
+python3 scripts/import_records.py base_xxx tbl_xxx data.csv
+```
+
+---
+
+## 核心概念
 
 按 **新版 MCP schema** 工作：
 - Base：`baseId`
